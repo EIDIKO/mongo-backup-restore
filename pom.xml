@@ -5,12 +5,14 @@
 	<groupId>com.eidiko.mongo</groupId>
 	<artifactId>MongoDB</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver-sync</artifactId>
@@ -24,28 +26,23 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>2.14.1</version> <!-- Use the latest version available -->
+			<version>2.14.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>2.14.1</version> <!-- Use the same version as log4j-core -->
+			<version>2.14.1</version>
 		</dependency>
-
-
-
 
 
 	</dependencies>
 
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.0.0</version>
-
 				<executions>
 					<execution>
 						<id>create-node</id>
@@ -54,12 +51,9 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
-							<mainClass>com.eidiko.mongo.MongoDBBackupRestoreAWS</mainClass> <!-- Replace com.example.MongoDBBackupRestoreAWS with your actual package 
-								and class name -->
+							<mainClass>com.eidiko.mongo.MongoDBBackupRestoreAWS</mainClass>
 						</configuration>
 					</execution>
-
-
 				</executions>
 			</plugin>
 		</plugins>

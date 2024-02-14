@@ -50,13 +50,13 @@ public class MongoDBBackupRestoreAWS {
 			executeCommand(backupCommand);
 			logger.info("Uploading Backup file to ASW S3 Bucket:: " + s3BucketName);
 			backupAndRestoreDatabase(s3BucketName, s3Key, accessKey, secretKey, region, s, t);
-			logger.info("Downloading Backup file to ASW S3 Bucket:: " + s3BucketName);
+			logger.info("Downloading Backup file from ASW S3 Bucket:: " + s3BucketName);
 			logger.info("Restoring Database to :: " + tDatabase);
 			String restoreCommand = "mongorestore" + " --host " + tHost + " --port " + tPort + " --db " + tDatabase
 					+ " " + backupFolder + sDatabase;
 			executeCommand(restoreCommand);
 			logger.info("Done!!");
-			logger.info("Success!!");
+			logger.info("Success!!!!");
 
 		} catch (Exception e) {
 			e.printStackTrace();
