@@ -10,7 +10,6 @@ import com.amazonaws.services.s3.model.S3Object;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -118,9 +117,9 @@ public class MongoDBBackupRestoreAWS {
 			Process process = Runtime.getRuntime().exec(command);
 			int exitCode = process.waitFor();
 			if (exitCode == 0) {
-				System.out.println("Command executed successfully: " + command);
+				System.out.println("Command Executed Successfully:: " + command);
 			} else {
-				System.err.println("Error executing command: " + command);
+				System.err.println("Error Executing Command: " + command);
 				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 				String line;
 				try {
@@ -133,7 +132,7 @@ public class MongoDBBackupRestoreAWS {
 
 			}
 		} catch (Exception e) {
-			System.err.println("Error executing command Catch: " + command);
+			System.err.println("Error executing command in Catch: " + command);
 			e.printStackTrace();
 		}
 	}
