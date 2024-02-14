@@ -1,0 +1,3 @@
+com\eidiko\mongo\MongoDBBackupRestoreAWS.class
+com\eidiko\mongo\MongoDBReader.class
+com\eidiko\mongo\MongoDBBackupRestore.class
