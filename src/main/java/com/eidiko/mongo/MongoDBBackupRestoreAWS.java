@@ -17,7 +17,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class MongoDBBackupRestoreAWS {
+	 private static final Logger logger = LogManager.getLogger(MongoDBBackupRestoreAWS.class);
+
 
 	public static void main(String[] args) {
 
@@ -39,18 +44,20 @@ public class MongoDBBackupRestoreAWS {
 			String tDatabase = props.getProperty("tDatabase");
 			String backupFolder = props.getProperty("backupFolder");
 			
-			System.out.println("Backing up Database:: " + sDatabase);
+			logger.info("Backing up Database:: " + sDatabase);
 
 			String backupCommand = "mongodump" + " --host " + sHost + " --port " + sPort + " --db " + sDatabase
 					+ " --out " +backupFolder;
 			executeCommand(backupCommand);
-			System.out.println("Uploading Backup file to ASW S3 Bucket:: " + s3BucketName);
+			logger.info("Uploading Backup file to ASW S3 Bucket:: " + s3BucketName);
 			backupDatabase(s3BucketName, s3Key, accessKey, secretKey, region, s, t);
-			System.out.println("Downloading Backup file to ASW S3 Bucket:: " + s3BucketName);
-			System.out.println("Restoring Database to :: " + tDatabase);
+			logger.info("Downloading Backup file to ASW S3 Bucket:: " + s3BucketName);
+			logger.info("Restoring Database to :: " + tDatabase);
 			String restoreCommand = "mongorestore" + " --host " + tHost + " --port " + tPort + " --db " + tDatabase
 					+ " " +backupFolder + sDatabase;
 			executeCommand(restoreCommand);
+			logger.info("Done!!");
+			logger.error("Success!!");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,8 +67,6 @@ public class MongoDBBackupRestoreAWS {
 	private static void backupDatabase(String s3BucketName, String s3Key, String accessKey, String secretKey,
 			String region, String s, String t) {
 		
-
-		// Upload the dump file to S3
 		uploadToS3(s3BucketName, s3Key, s, region, accessKey, secretKey);
 		downloadFromS3(s3BucketName, s3Key, t, region, accessKey, secretKey);
 	}
@@ -71,7 +76,7 @@ public class MongoDBBackupRestoreAWS {
 		AmazonS3 s3Client = getS3Client(accessKey, secretKey, region);
 		File file = new File(filePath);
 		s3Client.putObject(new PutObjectRequest(bucketName, file.getName(), file));
-		System.out.println("File uploaded to S3: " + file.getName());
+		logger.info("File uploaded to S3: " + file.getName());
 	}
 
 	private static void downloadFromS3(String bucketName, String key, String localFilePath, String region,
@@ -85,7 +90,7 @@ public class MongoDBBackupRestoreAWS {
 			while ((bytesRead = inputStream.read(buffer)) != -1) {
 				outputStream.write(buffer, 0, bytesRead);
 			}
-			System.out.println("File downloaded from S3: " + localFilePath);
+			logger.info("File downloaded from S3: " + localFilePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,14 +122,14 @@ public class MongoDBBackupRestoreAWS {
 			Process process = Runtime.getRuntime().exec(command);
 			int exitCode = process.waitFor();
 			if (exitCode == 0) {
-				System.out.println("Command Executed Successfully:: " + command);
+				logger.info("Command Executed Successfully:: " + command);
 			} else {
 				System.err.println("Error Executing Command: " + command);
 				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 				String line;
 				try {
 					while ((line = errorReader.readLine()) != null) {
-						System.err.println(line);
+						logger.error(line);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -132,7 +137,7 @@ public class MongoDBBackupRestoreAWS {
 
 			}
 		} catch (Exception e) {
-			System.err.println("Error executing command in Catch: " + command);
+			logger.error("Error executing command in Catch: " + command);
 			e.printStackTrace();
 		}
 	}
