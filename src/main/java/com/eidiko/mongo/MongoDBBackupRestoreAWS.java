@@ -21,8 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MongoDBBackupRestoreAWS {
-	 private static final Logger logger = LogManager.getLogger(MongoDBBackupRestoreAWS.class);
-
+	private static final Logger logger = LogManager.getLogger(MongoDBBackupRestoreAWS.class);
 
 	public static void main(String[] args) {
 
@@ -43,18 +42,18 @@ public class MongoDBBackupRestoreAWS {
 			String sDatabase = props.getProperty("sDatabase");
 			String tDatabase = props.getProperty("tDatabase");
 			String backupFolder = props.getProperty("backupFolder");
-			
+
 			logger.info("Backing up Database:: " + sDatabase);
 
 			String backupCommand = "mongodump" + " --host " + sHost + " --port " + sPort + " --db " + sDatabase
-					+ " --out " +backupFolder;
+					+ " --out " + backupFolder;
 			executeCommand(backupCommand);
 			logger.info("Uploading Backup file to ASW S3 Bucket:: " + s3BucketName);
-			backupDatabase(s3BucketName, s3Key, accessKey, secretKey, region, s, t);
+			backupAndRestoreDatabase(s3BucketName, s3Key, accessKey, secretKey, region, s, t);
 			logger.info("Downloading Backup file to ASW S3 Bucket:: " + s3BucketName);
 			logger.info("Restoring Database to :: " + tDatabase);
 			String restoreCommand = "mongorestore" + " --host " + tHost + " --port " + tPort + " --db " + tDatabase
-					+ " " +backupFolder + sDatabase;
+					+ " " + backupFolder + sDatabase;
 			executeCommand(restoreCommand);
 			logger.info("Done!!");
 			logger.info("Success!!");
@@ -64,9 +63,9 @@ public class MongoDBBackupRestoreAWS {
 		}
 	}
 
-	private static void backupDatabase(String s3BucketName, String s3Key, String accessKey, String secretKey,
+	private static void backupAndRestoreDatabase(String s3BucketName, String s3Key, String accessKey, String secretKey,
 			String region, String s, String t) {
-		
+
 		uploadToS3(s3BucketName, s3Key, s, region, accessKey, secretKey);
 		downloadFromS3(s3BucketName, s3Key, t, region, accessKey, secretKey);
 	}
