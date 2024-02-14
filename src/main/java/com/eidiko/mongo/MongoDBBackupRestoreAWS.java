@@ -57,7 +57,7 @@ public class MongoDBBackupRestoreAWS {
 					+ " " +backupFolder + sDatabase;
 			executeCommand(restoreCommand);
 			logger.info("Done!!");
-			logger.error("Success!!");
+			logger.info("Success!!");
 
 		} catch (Exception e) {
 			e.printStackTrace();
