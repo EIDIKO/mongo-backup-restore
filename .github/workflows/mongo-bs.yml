@@ -1,0 +1,21 @@
+name: EIDIKO-MONGO-BACKUP-RESTORE
+on:
+  push:
+    branches: [ main ]
+env:
+ BAR_STORE: Sum_API\target\ace\Sum_API-1.0.0.bar
+ BAR_STORE-1: target\SamplApp-1.0.bar
+jobs:
+  MONGO-BACKUP-RESTORE:
+    environment: 
+      name: LOCAL
+      url: "http://localhost:4417"
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: List Folder
+        run: |
+          ls
+      - name: Backup & Restore MongoDB via AWS
+        run: |
+          mvn clean package
